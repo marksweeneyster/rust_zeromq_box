@@ -1,9 +1,19 @@
-use std::convert::TryInto;
-use std::error::Error;
+use signal_hook::{consts::SIGINT, consts::SIGABRT, consts::SIGTERM, iterator::Signals};
+use std::{convert::TryInto, error::Error, process, thread};
 use zeromq::{Socket, SocketRecv, SocketSend};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
+    let mut signals = Signals::new(&[SIGINT, SIGABRT, SIGTERM])?;
+
+    thread::spawn(move || {
+        for sig in signals.forever() {
+            println!("message_server received signal {:?}", sig);
+            // interesting that this is not unsafe
+            process::exit(1);
+        }
+    });
+
     let mut socket = zeromq::RepSocket::new();
     socket
         .connect("tcp://127.0.0.1:5560")
