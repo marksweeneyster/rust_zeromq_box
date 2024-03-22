@@ -6,7 +6,7 @@ use zeromq::{Socket, SocketRecv};
 async fn main() -> Result<(), Box<dyn Error>> {
     let args: Vec<String> = env::args().collect();
 
-    let port  = if args.len() > 1 { &args[1] } else { "9876" };
+    let port = if args.len() > 1 { &args[1] } else { "9876" };
     let topic = if args.len() > 2 { &args[2] } else { "hotdogs" };
 
     let endpoint = "tcp://127.0.0.1:".to_owned() + port;
