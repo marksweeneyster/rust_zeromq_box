@@ -1,5 +1,6 @@
-use signal_hook::{consts::SIGINT, consts::SIGABRT, consts::SIGTERM, iterator::Signals};
 use std::{convert::TryInto, error::Error, process, thread};
+
+use signal_hook::{consts::SIGABRT, consts::SIGINT, consts::SIGTERM, iterator::Signals};
 use zeromq::{Socket, SocketRecv, SocketSend};
 
 #[tokio::main]
@@ -8,8 +9,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     thread::spawn(move || {
         for sig in signals.forever() {
-            println!("message_server received signal {:?}", sig);
-            // interesting that this is not unsafe
+            eprintln!(":message_server received signal {:?}", sig);
             process::exit(1);
         }
     });

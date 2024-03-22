@@ -1,6 +1,6 @@
-use signal_hook::{consts::SIGINT, consts::SIGABRT, consts::SIGTERM, iterator::Signals};
 use std::{error::Error, process, thread};
 
+use signal_hook::{consts::SIGABRT, consts::SIGINT, consts::SIGTERM, iterator::Signals};
 use zeromq::prelude::*;
 
 #[tokio::main]
@@ -9,7 +9,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     thread::spawn(move || {
         for sig in signals.forever() {
-            println!("message_broker received signal {:?}", sig);
+            eprintln!(":message_broker received signal {:?}", sig);
             // interesting that this is not unsafe
             process::exit(1);
         }

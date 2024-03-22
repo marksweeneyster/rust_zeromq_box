@@ -1,9 +1,19 @@
-use std::env;
-use std::error::Error;
+use std::{error::Error, env, process, thread};
+use signal_hook::consts::{SIGABRT, SIGINT, SIGTERM};
+use signal_hook::iterator::Signals;
 use zeromq::{Socket, SocketRecv};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
+    let mut signals = Signals::new(&[SIGINT, SIGABRT, SIGTERM])?;
+
+    thread::spawn(move || {
+        for sig in signals.forever() {
+            eprintln!(":subscriber received signal {:?}", sig);
+            process::exit(1);
+        }
+    });
+
     let args: Vec<String> = env::args().collect();
 
     let port = if args.len() > 1 { &args[1] } else { "9876" };

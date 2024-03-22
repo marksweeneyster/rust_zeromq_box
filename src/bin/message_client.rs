@@ -1,6 +1,7 @@
 use std::error::Error;
-use zeromq::Socket;
+
 use zeromq::{SocketRecv, SocketSend};
+use zeromq::Socket;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
