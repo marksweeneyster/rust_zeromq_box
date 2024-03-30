@@ -6,3 +6,4 @@ edition = "2021"
 [dependencies]
 zeromq = "0.3.5"
 tokio = { version = "1.36.0", features = ["full"] }
+flatbuffers = "23.5.26"
