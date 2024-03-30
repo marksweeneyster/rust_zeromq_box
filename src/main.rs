@@ -2,8 +2,6 @@ use std::env;
 use std::error::Error;
 use zeromq::{Socket, SocketRecv};
 
-//extern crate flatbuffers;
-
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
     let args: Vec<String> = env::args().collect();
@@ -29,7 +27,6 @@ async fn main() -> Result<(), Box<dyn Error>> {
         for w in repl.iter() {
             dbg!(w);
         }
-        //dbg!(repl);
     }
     Ok(())
 }
