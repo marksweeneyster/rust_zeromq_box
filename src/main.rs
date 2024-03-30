@@ -1,6 +1,13 @@
+mod something;
+
 use std::env;
 use std::error::Error;
 use zeromq::{Socket, SocketRecv};
+
+// @TODO
+// make a monster topic publisher (could be separate project in another language)
+// integrate an fbs schema file and flatc as a build step in the project
+// make a module that will take the message bytes and print it out
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
@@ -19,14 +26,10 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     socket.subscribe(topic).await?;
 
-    let mut _builder = flatbuffers::FlatBufferBuilder::with_capacity(1024);
-
     for i in 0..10 {
         println!("Message {}", i);
         let repl = socket.recv().await?;
-        for w in repl.iter() {
-            dbg!(w);
-        }
+        something::process_message(repl, topic);
     }
     Ok(())
 }
