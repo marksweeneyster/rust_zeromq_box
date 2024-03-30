@@ -2,7 +2,7 @@
 #[path = "../monster_generated.rs"]
 mod monster_generated;
 
-pub use monster_generated::my_game::sample::{root_as_monster};
+pub use monster_generated::my_game::sample::root_as_monster;
 
 pub fn process_message(msg: zeromq::ZmqMessage, topic: &str) {
     println!("topic: {}", topic);
@@ -10,11 +10,7 @@ pub fn process_message(msg: zeromq::ZmqMessage, topic: &str) {
         if w.eq(topic) {
             continue;
         }
-        if w.eq("monster") {
-            process_monster(w);
-            continue;
-        }
-        dbg!(w);
+        process_monster(w);
     }
 }
 
@@ -31,7 +27,6 @@ fn process_monster(buf: &[u8]) {
     let y = pos.y();
     let z = pos.z();
 
-    println!("Monster");
     println!("name: {}, mana: {}, hp: {}", name, mana, hp);
     println!("color: {}", color.variant_name().unwrap());
     println!("position: [{},{},{}]", x, y, z);
@@ -41,4 +36,5 @@ fn process_monster(buf: &[u8]) {
     for w in weps.iter() {
         println!("weapon: {}", w.name().unwrap());
     }
+    println!("-------");
 }
