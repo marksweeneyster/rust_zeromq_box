@@ -2,8 +2,6 @@
 
 Currently, the one binary is a localhost SUB client.
 
-It defaults to port `9876` and topic "hotdogs" but port and topic can be added to the command line invocation.
-
-```
-./rust_zeromq_box 6789 nothotdog
-```
+Added _flatbuffers_ messaging.  You must use a new `flatc` compiler, `23.5.26+`. 
+There is a breaking change for rust generated files when mixing old compiler output with new
+_flatbuffers_ libs.
