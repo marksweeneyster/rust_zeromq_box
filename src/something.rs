@@ -1,5 +1,5 @@
 #[allow(dead_code, unused_imports)]
-#[path = "../monster_generated.rs"]
+#[path = "../target/flatbuffers/Monster_generated.rs"]
 mod monster_generated;
 
 pub use monster_generated::my_game::sample::root_as_monster;
