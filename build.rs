@@ -1,7 +1,10 @@
+use std::fs;
 use flatc_rust;
 
 use std::path::Path;
 use flatc_rust::Flatc;
+
+use protoc_rust;
 
 fn main() {
     println!("cargo:rerun-if-changed=fb_schema/Monster.fbs");
@@ -18,4 +21,14 @@ fn main() {
         ..Default::default()
     }).expect("flatc generated rust file(s)");
 
+    let protos_dir = "target/protos";
+    // hmmmm, `protoc_rust` doesn't mkdir (???)
+    fs::create_dir_all(protos_dir).expect("Failed to create protos out directory");
+    protoc_rust::Codegen::new()
+        .protoc_path("D:/tools/vcpkg/installed/x64-windows/tools/protobuf/protoc")
+        .out_dir(protos_dir)
+        .inputs(&["protobuf_schema/address_book.proto"])
+        .include("protobuf_schema")
+        .run()
+        .expect("Running protoc failed.");
 }

@@ -10,3 +10,4 @@ flatbuffers = "23.5.26"
 
 [build-dependencies]
 flatc-rust = "0.2.0"
+protoc-rust = "2.28.0"
