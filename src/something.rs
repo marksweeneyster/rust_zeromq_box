@@ -1,16 +1,22 @@
+pub use monster_generated::my_game::sample::root_as_monster;
+
 #[allow(dead_code, unused_imports)]
 #[path = "../target/flatbuffers/Monster_generated.rs"]
 mod monster_generated;
 
-pub use monster_generated::my_game::sample::root_as_monster;
-
 pub fn process_message(msg: zeromq::ZmqMessage, topic: &str) {
+    if msg.len() < 2 {
+        return;
+    }
     println!("topic: {}", topic);
-    for w in msg.iter() {
-        if w.eq(topic) {
-            continue;
+
+    match (msg.get(0), msg.get(1)) {
+        (Some(envelope), Some(buf)) => {
+            if envelope.eq(topic) {
+                process_monster(buf);
+            }
         }
-        process_monster(w);
+        _ => {}
     }
 }
 
