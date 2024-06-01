@@ -10,13 +10,10 @@ pub fn process_message(msg: zeromq::ZmqMessage, topic: &str) {
     }
     println!("topic: {}", topic);
 
-    match (msg.get(0), msg.get(1)) {
-        (Some(envelope), Some(buf)) => {
-            if envelope.eq(topic) {
-                process_monster(buf);
-            }
+    if let (Some(envelope), Some(buf)) = (msg.get(0), msg.get(1)) {
+        if envelope.eq(topic) {
+            process_monster(buf);
         }
-        _ => {}
     }
 }
 

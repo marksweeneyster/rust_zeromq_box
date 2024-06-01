@@ -3,7 +3,7 @@ use std::error::Error;
 
 use zeromq::{Socket, SocketRecv};
 
-mod something;
+mod monster_mash;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
@@ -25,7 +25,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     for i in 0..10 {
         println!("Message {}", i);
         let repl = socket.recv().await?;
-        something::process_message(repl, topic);
+        monster_mash::process_message(repl, topic);
     }
     Ok(())
 }

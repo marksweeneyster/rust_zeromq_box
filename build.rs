@@ -1,9 +1,7 @@
 use std::fs;
 use std::path::Path;
 
-use flatc_rust;
 use flatc_rust::Flatc;
-use protoc_rust;
 
 fn main() {
     println!("cargo:rerun-if-changed=fb_schema/Monster.fbs");
@@ -28,7 +26,7 @@ fn main() {
     protoc_rust::Codegen::new()
         .protoc_path(protoc_path)
         .out_dir(protos_dir)
-        .inputs(&["protobuf_schema/address_book.proto"])
+        .inputs(["protobuf_schema/address_book.proto"])
         .include("protobuf_schema")
         .run()
         .expect("Running protoc failed.");
