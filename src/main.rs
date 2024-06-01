@@ -1,11 +1,9 @@
-mod something;
-
 use std::env;
 use std::error::Error;
+
 use zeromq::{Socket, SocketRecv};
 
-// @TODO
-// integrate flatc as a build step in the project
+mod something;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
