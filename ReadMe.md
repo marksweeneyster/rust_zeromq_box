@@ -10,3 +10,18 @@ The build step (see **build.rs**) uses the `flatc` and `protoc` compilers. Speci
 absolute paths in environment variables:
  - `FLATC_DIR`
  - `PROTOC_DIR`
+
+## Monsters
+I picked the flatbuffers monster example as use a case.  The schema is in the **fb_schema** folder. 
+
+### terminal 1, publish
+
+```console
+> cargo run --bin monster_publisher 127.0.0.1 8756
+```
+
+### terminal 2, subscribe
+
+```console
+> cargo run --bin zmq_subscriber 127.0.0.1 8756 monster
+```

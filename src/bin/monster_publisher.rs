@@ -29,7 +29,7 @@ use crate::monster_generated::my_game::sample::{
 #[path = "../../target/flatbuffers/Monster_generated.rs"]
 mod monster_generated;
 
-fn make_monster() -> ZmqMessage {
+fn make_monster() -> Bytes {
     let mut builder = flatbuffers::FlatBufferBuilder::with_capacity(1024);
 
     let weapon_one_name = builder.create_string("Club");
@@ -77,28 +77,35 @@ fn make_monster() -> ZmqMessage {
     );
     builder.finish(ogre, None);
     let mut buf = builder.finished_data();
-    println!("bytes len {}", buf.len());
 
-    let topic_bytes = Bytes::from("monster");
-    let ogre_bytes = buf.copy_to_bytes(buf.len());
-
-    let frames = vec![topic_bytes, ogre_bytes];
-    ZmqMessage::try_from(frames).expect("ZMQ message error")
+    buf.copy_to_bytes(buf.len())
 }
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
     let args: Vec<String> = env::args().collect();
 
-    let port = if args.len() > 1 { &args[1] } else { "8883" };
-    let endpoint = format!("tcp://127.0.0.1:{}", port);
+    let ip_addr = if args.len() > 1 {
+        &args[1]
+    } else {
+        "127.0.0.1"
+    };
+    let port = if args.len() > 2 { &args[2] } else { "8883" };
+
+    let endpoint = format!("tcp://{}:{}", ip_addr, port);
 
     let mut publisher = zeromq::PubSocket::new();
     publisher.bind(endpoint.as_str()).await?;
 
-    let message = make_monster();
+    let topic_bytes = Bytes::from("monster");
+    let monster_bytes = make_monster();
 
-    loop {
+    let frames = vec![topic_bytes, monster_bytes];
+    let message = ZmqMessage::try_from(frames).expect("ZMQ message error");
+
+    println!("\nPublishing monsters on {}:{}\n", ip_addr, port);
+    // publish once a second for 1000 seconds
+    for _ in 0..1000 {
         publisher.send(message.clone()).await?;
         sleep(Duration::from_millis(1000)).await;
     }

@@ -43,6 +43,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     socket.subscribe(topic).await?;
 
+    println!("\nSubscribing to \"{}\", on {}:{}\n", topic, ip_addr, port);
+
     for i in 0..10 {
         println!("Message {}", i);
         let repl = socket.recv().await?;
