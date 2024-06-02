@@ -3,16 +3,17 @@ use std::error::Error;
 
 use zeromq::{Socket, SocketRecv};
 
-mod monster_mash;
+mod message_mash;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
     let args: Vec<String> = env::args().collect();
 
-    let port = if args.len() > 1 { &args[1] } else { "8883" };
-    let topic = if args.len() > 2 { &args[2] } else { "monster" };
+    let ip_addr = if args.len() > 1 { &args[1] } else { "127.0.0.1" };
+    let port = if args.len() > 2 { &args[2] } else { "8883" };
+    let topic = if args.len() > 3 { &args[3] } else { "monster" };
 
-    let endpoint = "tcp://127.0.0.1:".to_owned() + port;
+    let endpoint = format!("tcp://{}:{}", ip_addr, port);
 
     let mut socket = zeromq::SubSocket::new();
     socket
@@ -25,7 +26,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     for i in 0..10 {
         println!("Message {}", i);
         let repl = socket.recv().await?;
-        monster_mash::process_message(repl, topic);
+        message_mash::process_message(repl, topic);
     }
     Ok(())
 }

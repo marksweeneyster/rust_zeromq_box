@@ -28,11 +28,11 @@ fn process_monster(buf: &[u8]) {
     // Get and test some scalar types from the FlatBuffer.
     let hp = monster.hp();
     let mana = monster.mana();
-    let name = monster.name().unwrap_or_else(|| "_");
+    let name = monster.name().unwrap_or("_");
     let color = monster.color();
 
     println!("name: {}, mana: {}, hp: {}", name, mana, hp);
-    println!("color: {}", color.variant_name().unwrap_or_else(|| "_"));
+    println!("color: {}", color.variant_name().unwrap_or("_"));
 
     match monster.pos() {
         Some(pos) => {
@@ -47,7 +47,7 @@ fn process_monster(buf: &[u8]) {
     match monster.weapons() {
         Some(weapons) => {
             for w in weapons.iter() {
-                println!("weapon: {}", w.name().unwrap_or_else(|| "_"));
+                println!("weapon: {}", w.name().unwrap_or("_"));
             }
         }
         None => println!("no weapons"),
