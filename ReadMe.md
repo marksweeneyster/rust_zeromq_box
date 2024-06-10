@@ -38,3 +38,6 @@ weapon: Club
 weapon: Other Club
 ...
 ```
+
+## Other examples
+Further examples can be found in `src/bin` subfolders. 
