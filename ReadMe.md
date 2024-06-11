@@ -10,6 +10,12 @@ _flatbuffers_ dependency libs. The build step (see **build.rs**) uses the `flatc
 absolute path in an environment variable:
  - `FLATC_DIR`
 
+A clean solution (that will keep IDEs happy) is to create `.cargo/config.toml` with this:
+```toml
+[env]
+FLATC_DIR = "<absolute path to a good flatc>"
+```
+
 ## Monsters
 I picked the flatbuffers monster example as a use case.  The schema is in the **fb_schema** folder. 
 
